@@ -132,7 +132,7 @@ public class WoordenController implements Initializable {
                 if (line.contains(word))
                 {
                     positions.add(i);
-                    continue;
+                    /////////////////////////////////////////////////////////////continue;
                 }                
             }
             output += word+": " + positions.toString() + "\n";
@@ -144,11 +144,8 @@ public class WoordenController implements Initializable {
     {
         String string = Normalizer.normalize(taInput.getText().trim().toLowerCase(), Normalizer.Form.NFD);
         string = string.replaceAll("[^\\p{ASCII}]", "");
-        String[] words = string.split("\\s+");
-        for (int i = 0; i < words.length; i++)
-        {
-            words[i] = words[i].replaceAll(",$", "");
-        }
+        String[] words = string.split("[\\s,\\.]+");
+        
         return words;
     }
 
