@@ -24,7 +24,7 @@ public class Huffman {
         makeHuffmanTree("bananen");
     }
 
-    private static PriorityQueue<Map.Entry<Character, Integer>> makeHuffmanQueue(String countString)
+    private static PriorityQueue<HuffmanNode> makeHuffmanQueue(String countString)
     {
         // Maak temp hashmap om aantal letters te tellen
         HashMap<Character, Integer> tempHashMap = new HashMap<>();
@@ -42,33 +42,33 @@ public class Huffman {
 
         // Maak priority queue aanmaken met de size van de temp hashmap
         // Priority queue sorteert op value van de entryset
-        PriorityQueue<Map.Entry<Character, Integer>> huffmanQueue = new PriorityQueue<>(tempHashMap.keySet().size(), new Comparator<Map.Entry<Character, Integer>>() {
-            public int compare(Map.Entry<Character, Integer> value1, Map.Entry<Character, Integer> value2)
+        PriorityQueue<HuffmanNode> huffmanQueue = new PriorityQueue<>(tempHashMap.keySet().size(), new Comparator<HuffmanNode>() {
+            public int compare(HuffmanNode value1, HuffmanNode value2)
             {
                 return value1.getValue().compareTo(value2.getValue());
             }
         });
 
         // Stop de hashmap in de Priority queue
-        huffmanQueue.addAll(tempHashMap.entrySet());
+        for (Map.Entry<Character, Integer> entry : tempHashMap.entrySet())
+        {
+            HuffmanNode node = new HuffmanNode(entry);
+            huffmanQueue.offer(node);
+        }
 
         return huffmanQueue;
     }
 
     private static void makeHuffmanTree(String toCode)
     {
-        PriorityQueue<Map.Entry<Character, Integer>> huffmanQueue = makeHuffmanQueue(toCode);
+        PriorityQueue<HuffmanNode> huffmanQueue = makeHuffmanQueue(toCode);
 
         // TEMP TO DISPLAY IT WORKZZZ
         int x = huffmanQueue.size();
         for (int i = 0; i < x; i++)
         {
-            System.out.println(huffmanQueue.poll());
+            System.out.println(huffmanQueue.poll().getValue());
         }
         // END TEMP
-
-        // Eerste 2 nodes waar een boom mee moet beginnen
-        Map.Entry<Character, Integer> value1 = huffmanQueue.poll();
-        Map.Entry<Character, Integer> value2 = huffmanQueue.poll();
     }
 }
