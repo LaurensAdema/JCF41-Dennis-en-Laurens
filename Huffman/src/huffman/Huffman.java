@@ -5,11 +5,10 @@
  */
 package huffman;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeMap;
+import java.util.PriorityQueue;
 
 /**
  *
@@ -22,53 +21,54 @@ public class Huffman {
      */
     public static void main(String[] args)
     {
-        System.out.println(countUniqueChars("bananen").size());
+        makeHuffmanTree("bananen");
     }
 
-    private static TreeMap<Character, Integer> countUniqueChars(String countString)
+    private static PriorityQueue<Map.Entry<Character, Integer>> makeHuffmanQueue(String countString)
     {
-        TreeMap<Character, Integer> distinctTest = new TreeMap<Character, Integer>();
+        // Maak temp hashmap om aantal letters te tellen
+        HashMap<Character, Integer> tempHashMap = new HashMap<>();
+
         for (char character : countString.toCharArray())
         {
-            if (!distinctTest.containsKey(character))
+            if (!tempHashMap.containsKey(character))
             {
-                distinctTest.put(character, 1);
+                tempHashMap.put(character, 1);
             } else
             {
-                distinctTest.put(character, distinctTest.get(character) + 1);
+                tempHashMap.put(character, tempHashMap.get(character) + 1);
             }
         }
-        System.out.println(distinctTest);
-        sortTreeMap(distinctTest);
-        return distinctTest;
+
+        // Maak priority queue aanmaken met de size van de temp hashmap
+        // Priority queue sorteert op value van de entryset
+        PriorityQueue<Map.Entry<Character, Integer>> huffmanQueue = new PriorityQueue<>(tempHashMap.keySet().size(), new Comparator<Map.Entry<Character, Integer>>() {
+            public int compare(Map.Entry<Character, Integer> value1, Map.Entry<Character, Integer> value2)
+            {
+                return value1.getValue().compareTo(value2.getValue());
+            }
+        });
+
+        // Stop de hashmap in de Priority queue
+        huffmanQueue.addAll(tempHashMap.entrySet());
+
+        return huffmanQueue;
     }
 
-    private static ArrayList<java.util.Map.Entry<Character,Integer>> sortTreeMap(TreeMap<Character, Integer> map)
+    private static void makeHuffmanTree(String toCode)
     {
-        ArrayList<Character> sortedList = new ArrayList<>();
-        java.util.ArrayList<java.util.Map.Entry<Character,Integer>> sortedList2= new java.util.ArrayList<>();
-        for (Map.Entry<Character, Integer> entrySet : map.entrySet())
-        {
-            Character key = entrySet.getKey();
+        PriorityQueue<Map.Entry<Character, Integer>> huffmanQueue = makeHuffmanQueue(toCode);
 
-            Integer value = entrySet.getValue();
-            for (Character character : sortedList)
-            {
-                if (map.get(character) > value)
-                {
-                    sortedList2.add(sortedList.indexOf(character), new AbstractMap.SimpleEntry<>(key,value));
-                    sortedList.add(sortedList.indexOf(character), key);
-                    break;
-                }
-            }
-            if (!sortedList.contains(key))
-            {
-                sortedList.add(key);
-                sortedList2.add(new AbstractMap.SimpleEntry<>(key,value));
-            }
+        // TEMP TO DISPLAY IT WORKZZZ
+        int x = huffmanQueue.size();
+        for (int i = 0; i < x; i++)
+        {
+            System.out.println(huffmanQueue.poll());
         }
-        System.out.println(sortedList);
-        System.out.println(sortedList2);
-        return sortedList2;
+        // END TEMP
+
+        // Eerste 2 nodes waar een boom mee moet beginnen
+        Map.Entry<Character, Integer> value1 = huffmanQueue.poll();
+        Map.Entry<Character, Integer> value2 = huffmanQueue.poll();
     }
 }
