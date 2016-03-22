@@ -5,6 +5,7 @@
  */
 package huffman;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,12 +64,32 @@ public class Huffman {
     {
         PriorityQueue<HuffmanNode> huffmanQueue = makeHuffmanQueue(toCode);
 
-        // TEMP TO DISPLAY IT WORKZZZ
+        // TEMP TO DISPLAY IT WORKZZZ\
+        /*
         int x = huffmanQueue.size();
         for (int i = 0; i < x; i++)
         {
             System.out.println(huffmanQueue.poll().getValue());
         }
+         */
         // END TEMP
+        ArrayList<HuffmanNode> nodes = new ArrayList<>();
+        while (huffmanQueue.size() > 0)
+        {
+            HuffmanNode node1 = huffmanQueue.poll();
+            if (node1 != null)
+            {
+                nodes.add(node1);
+                HuffmanNode node2 = huffmanQueue.poll();
+                if (node2 != null)
+                {
+                    nodes.add(node2);
+                    HuffmanNode parent = new HuffmanNode(node1, node2);
+                    nodes.add(parent);
+                    huffmanQueue.offer(parent);
+                }
+            }
+        }
+        System.out.println(nodes);
     }
 }
