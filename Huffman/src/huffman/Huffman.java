@@ -5,6 +5,7 @@
  */
 package huffman;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,12 +17,22 @@ import java.util.PriorityQueue;
  */
 public class Huffman {
 
+    private static HuffmanNode master;
+    private static ArrayList<HuffmanNode> allNodes;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args)
     {
-        makeHuffmanTree("bananen");
+        makeHuffmanTree("wasserette");
+        String [] temp = encode("wasserette");
+        for(String s : temp)
+        {
+            System.out.print(s + " ");
+        }
+        System.out.println();
+        System.out.println(decode(temp));
     }
 
     private static PriorityQueue<HuffmanNode> makeHuffmanQueue(String countString)
@@ -63,15 +74,7 @@ public class Huffman {
     {
         PriorityQueue<HuffmanNode> huffmanQueue = makeHuffmanQueue(toCode);
 
-        // TEMP TO DISPLAY IT WORKZZZ\
-        /*
-        int x = huffmanQueue.size();
-        for (int i = 0; i < x; i++)
-        {
-            System.out.println(huffmanQueue.poll().getValue());
-        }
-         */
-        // END TEMP
+        // Zet PriorityQueue om naar nodes
         while (huffmanQueue.size() > 1)
         {
             HuffmanNode node1 = huffmanQueue.poll();
@@ -85,6 +88,51 @@ public class Huffman {
                 }
             }
         }
-        System.out.println(huffmanQueue.poll().drawTree());
+        master = huffmanQueue.poll();
+        allNodes = master.generateTree();
+    }
+
+    private static String[] encode(String toCode)
+    {
+        String[] codes = new String[toCode.length()];
+        if(allNodes == null)
+        {
+            makeHuffmanTree(toCode);
+        }
+        int i = 0;
+        for(char charr : toCode.toCharArray())
+        {
+            for(HuffmanNode node : allNodes)
+            {
+                if(node.getChar() == charr)
+                {
+                    codes[i] = node.getCode();
+                }
+            }
+            i++;
+        }
+        return codes;
+    }
+    
+    private static String decode(String[] toCode)
+    {
+        StringBuilder codes = new StringBuilder();
+        if(allNodes == null)
+        {
+            return "Dit gaat niet werken vriend";
+        }
+        int i = 0;
+        for(String s : toCode)
+        {
+            for(HuffmanNode node : allNodes)
+            {
+                if(node.getCode()== s)
+                {
+                    codes.append(node.getChar());
+                }
+            }
+            i++;
+        }
+        return codes.toString();
     }
 }

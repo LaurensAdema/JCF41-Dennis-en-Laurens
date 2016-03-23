@@ -19,6 +19,7 @@ public class HuffmanNode {
 
     private Character character;
     private Integer value;
+    private String code;
     private HuffmanNode child1;
     private HuffmanNode child2;
 
@@ -42,10 +43,21 @@ public class HuffmanNode {
         return child2;
     }
 
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
+
+    public String getCode()
+    {
+        return code;
+    }
+
     public HuffmanNode(Map.Entry<Character, Integer> entry)
     {
         character = entry.getKey();
         value = entry.getValue();
+        code = "";
     }
 
     public HuffmanNode(HuffmanNode child1, HuffmanNode child2)
@@ -53,13 +65,17 @@ public class HuffmanNode {
         this.child1 = child1;
         this.child2 = child2;
         value = child1.getValue() + child2.getValue();
+        code = "";
     }
 
     public ArrayList<HuffmanNode> generateTree()
     {
         ArrayList<HuffmanNode> allNodes = new ArrayList<>();
         ArrayList<HuffmanNode> tempNodes = new ArrayList<>();
-        allNodes.add(this);
+        if (character != null)
+        {
+            allNodes.add(this);
+        }
         tempNodes.add(this);
 
         // De begin node voegt zijn children toe aan een temp list
@@ -75,12 +91,20 @@ public class HuffmanNode {
                 HuffmanNode node = i.next();
                 if (node.getChild1() != null)
                 {
-                    allNodes.add(node.getChild1());
+                    node.getChild1().setCode(node.getCode() + "0");
+                    if (node.getChild1().getChar() != null)
+                    {
+                        allNodes.add(node.getChild1());
+                    }
                     tempIteratorNodes.add(node.getChild1());
                 }
                 if (node.getChild2() != null)
                 {
-                    allNodes.add(node.getChild2());
+                    node.getChild2().setCode(node.getCode() + "1");
+                    if (node.getChild2().getChar() != null)
+                    {
+                        allNodes.add(node.getChild2());
+                    }
                     tempIteratorNodes.add(node.getChild2());
                 }
                 i.remove();
@@ -90,9 +114,8 @@ public class HuffmanNode {
         return allNodes;
     }
 
-    public String drawTree()
+    public String drawTree(ArrayList<HuffmanNode> allNodes)
     {
-        ArrayList<HuffmanNode> allNodes = generateTree();
         StringBuilder sb = new StringBuilder();
         int count = 0;
         for (HuffmanNode node : allNodes)
