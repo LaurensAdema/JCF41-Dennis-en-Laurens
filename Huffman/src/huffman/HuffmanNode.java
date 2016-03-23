@@ -7,6 +7,7 @@ package huffman;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -54,25 +55,45 @@ public class HuffmanNode {
         value = child1.getValue() + child2.getValue();
     }
 
-    public String generateTree()
+    public ArrayList<HuffmanNode> generateTree()
     {
-        HuffmanNode tempChild1 = child1;
-        HuffmanNode tempChild2 = child2;
         ArrayList<HuffmanNode> allNodes = new ArrayList<>();
+        ArrayList<HuffmanNode> tempNodes = new ArrayList<>();
         allNodes.add(this);
+        tempNodes.add(this);
 
-        while (tempChild1 != null)
+        while (tempNodes.size() > 0)
         {
-            allNodes.add(tempChild1);
-            tempChild1 = tempChild1.getChild1();
-            allNodes.add(tempChild2);
-            tempChild2 = tempChild2.getChild2();
+            ArrayList<HuffmanNode> tempIteratorNodes = new ArrayList<>();
+            Iterator<HuffmanNode> i = tempNodes.iterator();
+            while (i.hasNext())
+            {
+                HuffmanNode node = i.next();
+                if (node.getChild1() != null)
+                {
+                    allNodes.add(node.getChild1());
+                    tempIteratorNodes.add(node.getChild1());
+                }
+                if (node.getChild2() != null)
+                {
+                    allNodes.add(node.getChild2());
+                    tempIteratorNodes.add(node.getChild2());
+                }
+                i.remove();
+            }
+            tempNodes.addAll(tempIteratorNodes);
         }
+        return allNodes;
+    }
+
+    public String drawTree()
+    {
+        ArrayList<HuffmanNode> allNodes = generateTree();
         StringBuilder sb = new StringBuilder();
         int count = 0;
         for (HuffmanNode node : allNodes)
         {
-            for (int i = 0  + count; i < Math.ceil(allNodes.size() / 2); i++)
+            for (int i = 0 + count; i < Math.ceil(allNodes.size() / 2); i++)
             {
                 sb.append("\t");
             }

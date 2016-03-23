@@ -85,6 +85,6 @@ public class Huffman {
                 }
             }
         }
-        System.out.println(huffmanQueue.poll().generateTree());
+        System.out.println(huffmanQueue.poll().drawTree());
     }
 }
