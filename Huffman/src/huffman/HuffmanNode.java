@@ -62,6 +62,10 @@ public class HuffmanNode {
         allNodes.add(this);
         tempNodes.add(this);
 
+        // De begin node voegt zijn children toe aan een temp list
+        // Vervolgens voegen zijn children hun children toe aan een andere lijst, wordt de eerste temp lijst leeg gegooid en de nieuwe children toegevoegd
+        // Dit proces herhaalt tot er geen kinderen meer zijn
+        // Alle nodes die voorbij komen worden toegevoegd aan een hoofdlist, dit is de tree.
         while (tempNodes.size() > 0)
         {
             ArrayList<HuffmanNode> tempIteratorNodes = new ArrayList<>();
