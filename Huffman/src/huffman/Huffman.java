@@ -25,14 +25,16 @@ public class Huffman {
      */
     public static void main(String[] args)
     {
-        makeHuffmanTree("wasserette");
-        String [] temp = encode("wasserette");
+        String code = "wasserette";
+        //makeHuffmanTree(code);
+        String [] temp = encode(code);
         for(String s : temp)
         {
             System.out.print(s + " ");
         }
         System.out.println();
         System.out.println(decode(temp));
+        System.out.println(master.drawTree());
     }
 
     private static PriorityQueue<HuffmanNode> makeHuffmanQueue(String countString)
@@ -100,6 +102,7 @@ public class Huffman {
             makeHuffmanTree(toCode);
         }
         int i = 0;
+        // Loop door de chars van de string en controleer op de lijst met codes
         for(char charr : toCode.toCharArray())
         {
             for(HuffmanNode node : allNodes)
@@ -122,6 +125,7 @@ public class Huffman {
             return "Dit gaat niet werken vriend";
         }
         int i = 0;
+        // Loop door de lijst met codes en kijk welke letters er bij horen
         for(String s : toCode)
         {
             for(HuffmanNode node : allNodes)
