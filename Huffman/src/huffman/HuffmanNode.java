@@ -71,21 +71,21 @@ public class HuffmanNode {
     public ArrayList<HuffmanNode> generateTree()
     {
         ArrayList<HuffmanNode> allNodes = new ArrayList<>();
-        ArrayList<HuffmanNode> tempNodes = new ArrayList<>();
+        ArrayList<HuffmanNode> loopParentNodes = new ArrayList<>();
         if (character != null)
         {
             allNodes.add(this);
         }
-        tempNodes.add(this);
+        loopParentNodes.add(this);
 
         // De begin node voegt zijn children toe aan een temp list mits er een char verbonden is aan de node
         // Vervolgens voegen zijn children hun children toe aan een andere lijst, wordt de eerste temp lijst leeg gegooid en de nieuwe children toegevoegd
         // Dit proces herhaalt tot er geen kinderen meer zijn
         // Alle nodes die voorbij komen worden toegevoegd aan een hoofdlist, dit is de tree.
-        while (tempNodes.size() > 0)
+        while (loopParentNodes.size() > 0)
         {
-            ArrayList<HuffmanNode> tempIteratorNodes = new ArrayList<>();
-            Iterator<HuffmanNode> i = tempNodes.iterator();
+            ArrayList<HuffmanNode> newChildrenToAddNodes = new ArrayList<>();
+            Iterator<HuffmanNode> i = loopParentNodes.iterator();
             while (i.hasNext())
             {
                 HuffmanNode node = i.next();
@@ -96,7 +96,7 @@ public class HuffmanNode {
                     {
                         allNodes.add(node.getChild1());
                     }
-                    tempIteratorNodes.add(node.getChild1());
+                    newChildrenToAddNodes.add(node.getChild1());
                 }
                 if (node.getChild2() != null)
                 {
@@ -105,81 +105,80 @@ public class HuffmanNode {
                     {
                         allNodes.add(node.getChild2());
                     }
-                    tempIteratorNodes.add(node.getChild2());
+                    newChildrenToAddNodes.add(node.getChild2());
                 }
                 i.remove();
             }
-            tempNodes.addAll(tempIteratorNodes);
+            loopParentNodes.addAll(newChildrenToAddNodes);
         }
         return allNodes;
     }
 
     public String drawTree()
     {
-        ArrayList<HuffmanNode> allNodes = new ArrayList<>();
-        ArrayList<HuffmanNode> tempNodes = new ArrayList<>();
-        if (character != null)
+        if(code == null)
         {
-            allNodes.add(this);
+            generateTree();
         }
-        tempNodes.add(this);
+        ArrayList<HuffmanNode> loopParentNodes = new ArrayList<>();
+        loopParentNodes.add(this);
 
-        // De begin node voegt zijn children toe aan een temp list
-        // Vervolgens voegen zijn children hun children toe aan een andere lijst, wordt de eerste temp lijst leeg gegooid en de nieuwe children toegevoegd
-        // Dit proces herhaalt tot er geen kinderen meer zijn
-        // Alle nodes die voorbij komen worden toegevoegd aan een hoofdlist, dit is de tree.
-        while (tempNodes.size() > 0)
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < getDepth(0); i++)
         {
-            ArrayList<HuffmanNode> tempIteratorNodes = new ArrayList<>();
-            Iterator<HuffmanNode> i = tempNodes.iterator();
+            sb.append("\t");
+        }
+        sb.append(this);
+        sb.append(System.getProperty("line.separator"));
+        int b = 0;
+        while (loopParentNodes.size() > 0)
+        {
+            b++;
+            ArrayList<HuffmanNode> newChildrenToAdd = new ArrayList<>();
+            Iterator<HuffmanNode> i = loopParentNodes.iterator();
+            for (int v = 0 + b; v < getDepth(0); v++)
+            {
+                sb.append("\t");
+            }
             while (i.hasNext())
             {
                 HuffmanNode node = i.next();
                 if (node.getChild1() != null)
                 {
-                    allNodes.add(node.getChild1());
-                    tempIteratorNodes.add(node.getChild1());
+                    sb.append(node.getChild1());
+                    newChildrenToAdd.add(node.getChild1());
                 }
                 if (node.getChild2() != null)
                 {
-                    allNodes.add(node.getChild2());
-                    tempIteratorNodes.add(node.getChild2());
+                    sb.append("\t");
+                    sb.append(node.getChild2());
+                    newChildrenToAdd.add(node.getChild2());
                 }
                 i.remove();
             }
-            tempNodes.addAll(tempIteratorNodes);
+            sb.append(System.getProperty("line.separator"));
+            loopParentNodes.addAll(newChildrenToAdd);
         }
-
-        StringBuilder sb = new StringBuilder();
-        int count = 0;
-        for (HuffmanNode node : allNodes)
-        {
-            for (int i = 0 + count; i < Math.ceil(allNodes.size() / 2); i++)
-            {
-                sb.append("\t");
-            }
-            sb.append(node);
-            if (node.getChild1() != null || node.getChild2() != null)
-            {
-                sb.append(System.getProperty("line.separator"));
-            }
-            for (int i = 1 + count; i < Math.ceil(allNodes.size() / 2); i++)
-            {
-                sb.append("\t");
-            }
-            if (node.getChild1() != null)
-            {
-                sb.append(node.getChild1());
-            }
-            if (node.getChild2() != null)
-            {
-                sb.append("\t");
-                sb.append(node.getChild2());
-            }
-            count++;
-        }
-
         return sb.toString();
+    }
+
+    public int getDepth(int i)
+    {
+        i++;
+        if (child1 == null && child2 == null)
+        {
+            return i;
+        }
+        if (child1 == null)
+        {
+            return child2.getDepth(i);
+        }
+        if (child2 == null)
+        {
+            return child1.getDepth(i);
+        }
+        return Math.max(child1.getDepth(i), child2.getDepth(i));
     }
 
     @Override
