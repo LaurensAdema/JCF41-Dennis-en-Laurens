@@ -5,7 +5,6 @@
  */
 package huffman;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,23 +72,19 @@ public class Huffman {
         }
          */
         // END TEMP
-        ArrayList<HuffmanNode> nodes = new ArrayList<>();
-        while (huffmanQueue.size() > 0)
+        while (huffmanQueue.size() > 1)
         {
             HuffmanNode node1 = huffmanQueue.poll();
             if (node1 != null)
             {
-                nodes.add(node1);
                 HuffmanNode node2 = huffmanQueue.poll();
                 if (node2 != null)
                 {
-                    nodes.add(node2);
                     HuffmanNode parent = new HuffmanNode(node1, node2);
-                    nodes.add(parent);
                     huffmanQueue.offer(parent);
                 }
             }
         }
-        System.out.println(nodes);
+        System.out.println(huffmanQueue.poll().generateTree());
     }
 }
