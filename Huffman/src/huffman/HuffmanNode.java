@@ -5,17 +5,16 @@
  */
 package huffman;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  *
  * @author Laurens Adema
  */
-public class HuffmanNode {
+public class HuffmanNode implements Comparable<HuffmanNode> {
 
     private Character character;
     private Integer value;
@@ -66,8 +65,72 @@ public class HuffmanNode {
         this.child2 = child2;
         value = child1.getValue() + child2.getValue();
         code = "";
+    }    
+
+    public HashMap<Character, String> generateCode()
+    {
+        HashMap<Character, String> codes = new HashMap<>();
+        postOrder(codes, this, "");
+
+        return codes;
     }
 
+    public void postOrder(HashMap<Character, String> map, HuffmanNode hn, String code)
+    {
+        if (hn.getChild1() != null)
+        {
+            postOrder(map, hn.getChild1(), code + "0");
+        }
+        if (hn.getChild2() != null)
+        {
+            postOrder(map, hn.getChild2(), code + "1");
+        } else
+        {
+            map.put(hn.getChar(), code);
+        }
+    }
+
+    public HuffmanNode getChild(Character c)
+    {
+        if (c.equals('0'))
+        {
+            return child1;
+        }
+        if (c.equals('1'))
+        {
+            return child2;
+        }
+        return null;
+    }
+    
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("| ");
+        if (character != null)
+        {
+            sb.append(character);
+        } else
+        {
+            sb.append("*");
+        }
+        sb.append(" ; ");
+        if (value != null)
+        {
+            sb.append(value);
+        }
+        sb.append(" |");
+        return sb.toString();
+    }
+
+    @Override
+    public int compareTo(HuffmanNode other)
+    {
+        return getValue().compareTo(other.getValue());
+    }
+    
+    // OUDE CODE
     public ArrayList<HuffmanNode> generateTree()
     {
         ArrayList<HuffmanNode> allNodes = new ArrayList<>();
@@ -116,7 +179,7 @@ public class HuffmanNode {
 
     public String drawTree()
     {
-        if(code == null)
+        if (code == null)
         {
             generateTree();
         }
@@ -179,26 +242,5 @@ public class HuffmanNode {
             return child1.getDepth(i);
         }
         return Math.max(child1.getDepth(i), child2.getDepth(i));
-    }
-
-    @Override
-    public String toString()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append("| ");
-        if (character != null)
-        {
-            sb.append(character);
-        } else
-        {
-            sb.append("*");
-        }
-        sb.append(" ; ");
-        if (value != null)
-        {
-            sb.append(value);
-        }
-        sb.append(" |");
-        return sb.toString();
     }
 }
