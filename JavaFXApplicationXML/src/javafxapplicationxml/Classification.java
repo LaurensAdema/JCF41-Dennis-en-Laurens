@@ -8,6 +8,8 @@ package javafxapplicationxml;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -17,6 +19,7 @@ public class Classification {
 
     private String speciesName;
     private List<Classification> children;
+    private ImageView image;
 
     public String getSpeciesName()
     {
@@ -33,10 +36,17 @@ public class Classification {
         return children;
     }
 
+    public void setImage(String imageURL)
+    {
+        this.image = new ImageView(imageURL);
+    }
+
     public Classification(String speciesName)
     {
         this.speciesName = speciesName;
         this.children = new ArrayList<>();
+        Image imageURL = new Image("http://maagg.com/wp-content/uploads/2015/09/naruto-640x834-190x122.png");
+        this.image = new ImageView(imageURL);
     }
 
     public void addChild(Classification child)

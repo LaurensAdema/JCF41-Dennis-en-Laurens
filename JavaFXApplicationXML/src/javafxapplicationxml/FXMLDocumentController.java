@@ -21,6 +21,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -42,6 +43,8 @@ public class FXMLDocumentController implements Initializable {
     private ComboBox comboBox;
     @FXML
     private TextField tbName;
+    
+    private TableColumn<Classification, ImageView> imageColumn = new TableColumn<Classification, ImageView>("Images");
 
     private ObservableList<Classification> species;
     private boolean isEditing;
@@ -50,10 +53,12 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
+        tableView.getColumns().add(imageColumn);
         species = FXCollections.observableArrayList();
         comboBox.setItems(species);
         nameColumn.setCellValueFactory(new PropertyValueFactory<Classification, String>("speciesName"));
         childrenColumn.setCellValueFactory(new PropertyValueFactory<Classification, List<Classification>>("children"));
+        imageColumn.setCellValueFactory(new PropertyValueFactory<Classification, ImageView>("image"));
         tableView.setItems(species);
         species.addListener(new ListChangeListener<Classification>() {
             @Override
@@ -125,6 +130,7 @@ public class FXMLDocumentController implements Initializable {
     {
         Classification hominoidea = new Classification("Hominoidea");
         species.add(hominoidea);
+        hominoidea.setImage("http://i1.wp.com/upriser.com/wp-content/uploads/2015/09/naruto-640x834.png?resize=640%2C834");
         Classification hominidea = new Classification("Hominidea");
         species.add(hominidea);
         Classification hylobatidae = new Classification("Hylobatidae");
