@@ -19,7 +19,7 @@ public class Classification {
 
     private String speciesName;
     private List<Classification> children;
-    private ImageView image;
+    //private Image image;
 
     public String getSpeciesName()
     {
@@ -36,17 +36,22 @@ public class Classification {
         return children;
     }
 
+    /*
+    public Image getImage()
+    {
+        return image;
+    }
+
     public void setImage(String imageURL)
     {
-        this.image = new ImageView(imageURL);
-    }
+        this.image = new Image(imageURL);
+    }*/
 
     public Classification(String speciesName)
     {
         this.speciesName = speciesName;
         this.children = new ArrayList<>();
-        Image imageURL = new Image("http://maagg.com/wp-content/uploads/2015/09/naruto-640x834-190x122.png");
-        this.image = new ImageView(imageURL);
+        //this.image = new Image("http://maagg.com/wp-content/uploads/2015/09/naruto-640x834-190x122.png");
     }
 
     public void addChild(Classification child)

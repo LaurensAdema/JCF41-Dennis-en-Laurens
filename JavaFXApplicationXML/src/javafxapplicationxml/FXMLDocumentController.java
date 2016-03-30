@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -16,12 +17,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Callback;
 
 /**
  *
@@ -44,7 +48,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TextField tbName;
     
-    private TableColumn<Classification, ImageView> imageColumn = new TableColumn<Classification, ImageView>("Images");
+    private TableColumn<Classification, Image> imageColumn = new TableColumn<Classification, Image>("Images");
 
     private ObservableList<Classification> species;
     private boolean isEditing;
@@ -58,7 +62,33 @@ public class FXMLDocumentController implements Initializable {
         comboBox.setItems(species);
         nameColumn.setCellValueFactory(new PropertyValueFactory<Classification, String>("speciesName"));
         childrenColumn.setCellValueFactory(new PropertyValueFactory<Classification, List<Classification>>("children"));
-        imageColumn.setCellValueFactory(new PropertyValueFactory<Classification, ImageView>("image"));
+        //imageColumn.setCellValueFactory(new PropertyValueFactory<Classification, ImageView>("image"));
+        /*
+        imageColumn.setCellFactory(new Callback<TableColumn<Classification, Image>, TableCell<Classification, Image>>() {
+            @Override
+            public TableCell<Classification, Image> call(TableColumn<Classification, Image> param) {
+                //Set up the ImageView
+                final ImageView imageview = new ImageView();
+                imageview.setFitHeight(50);
+                imageview.setFitWidth(50);
+
+                //Set up the Table
+                TableCell<Classification, Image> cell = new TableCell<Classification, Image>() {
+                    public void updateItem(Classification item, boolean empty) {
+                        if (item != null) {
+                            imageview.setImage(new Image("http://maagg.com/wp-content/uploads/2015/09/naruto-640x834-190x122.png"));
+                        }
+                    }
+                };
+
+                // Attach the imageview to the cell
+                cell.setGraphic(imageview);
+                return cell;
+            }
+
+        });
+        */
+        //imageColumn.setCellValueFactory(c-> new SimpleObjectProperty<ImageView>(c.getValue().getImage()));
         tableView.setItems(species);
         species.addListener(new ListChangeListener<Classification>() {
             @Override
@@ -130,7 +160,6 @@ public class FXMLDocumentController implements Initializable {
     {
         Classification hominoidea = new Classification("Hominoidea");
         species.add(hominoidea);
-        hominoidea.setImage("http://i1.wp.com/upriser.com/wp-content/uploads/2015/09/naruto-640x834.png?resize=640%2C834");
         Classification hominidea = new Classification("Hominidea");
         species.add(hominidea);
         Classification hylobatidae = new Classification("Hylobatidae");
